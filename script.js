@@ -1,12 +1,12 @@
 const app = document.getElementById('app');
 
-// Nastavení hry
+
 let boardSize = 4;
 let playerTurn = 1;
 let playerScores = [0, 0];
 let moves = 0;
 
-// Generování obrázků pro pexeso (jednoduše číselné páry)
+
 const createCardValues = (size) => {
     const values = [];
     for (let i = 1; i <= (size * size) / 2; i++) {
@@ -15,7 +15,7 @@ const createCardValues = (size) => {
     return values.sort(() => 0.5 - Math.random());
 };
 
-// Vytvoření a inicializace herní plochy
+
 const createBoard = (size) => {
     const board = document.createElement('div');
     board.className = 'board';
@@ -35,7 +35,7 @@ const createBoard = (size) => {
 
 let flippedCards = [];
 
-// Funkce pro otáčení karet
+
 const flipCard = (card) => {
     if (card.classList.contains('flipped') || flippedCards.length === 2) return;
     card.classList.add('flipped');
@@ -47,7 +47,7 @@ const flipCard = (card) => {
     }
 };
 
-// Kontrola shody dvojice
+
 const checkMatch = () => {
     moves++;
     const [card1, card2] = flippedCards;
@@ -67,13 +67,13 @@ const checkMatch = () => {
     }
 };
 
-// Přepínání hráče
+
 const switchPlayer = () => {
     playerTurn = playerTurn === 1 ? 2 : 1;
     updateTurn();
 };
 
-// Aktualizace skóre a tahu
+
 const updateScore = () => {
     document.getElementById('score').textContent = `Hráč 1: ${playerScores[0]} | Hráč 2: ${playerScores[1]}`;
     if (playerScores[0] + playerScores[1] === (boardSize * boardSize) / 2) {
@@ -86,7 +86,7 @@ const updateTurn = () => {
     document.getElementById('moves').textContent = `Počet tahů: ${moves}`;
 };
 
-// Restart hry
+
 const restartGame = () => {
     playerTurn = 1;
     playerScores = [0, 0];
@@ -95,7 +95,7 @@ const restartGame = () => {
     init();
 };
 
-// Inicializace hry
+
 const init = () => {
     const controls = document.createElement('div');
     controls.className = 'controls';
