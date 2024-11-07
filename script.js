@@ -1,17 +1,26 @@
 const app = document.getElementById('app');
 
 
-let boardSize = 4;
+let boardSize = 4; 
 let playerTurn = 1;
 let playerScores = [0, 0];
 let moves = 0;
 
+const imagePaths = [
 
-const createCardValues = (size) => {
-    const values = [];
-    for (let i = 1; i <= (size * size) / 2; i++) {
-        values.push(i, i);
-    }
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Cherry-256.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Lemon-512.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Grape-512.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Watermelon-512.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Apple-512.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Strawberry-512.png',
+    'https://cdn0.iconfinder.com/data/icons/fruity-3/512/Orange-512.png',
+    'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Coin.png',
+];
+
+
+const createCardImages = (size) => {
+    const values = [...imagePaths, ...imagePaths];
     return values.sort(() => 0.5 - Math.random());
 };
 
@@ -20,12 +29,28 @@ const createBoard = (size) => {
     const board = document.createElement('div');
     board.className = 'board';
     board.style.gridTemplateColumns = `repeat(${size}, 80px)`;
-    const values = createCardValues(size);
+    const values = createCardImages(size);
 
-    values.forEach((value) => {
+    values.forEach((imagePath) => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.dataset.value = value;
+
+        
+        const cardInner = document.createElement('div');
+        cardInner.className = 'card-inner';
+
+        
+        const cardFront = document.createElement('div');
+        cardFront.className = 'card-front';
+
+        
+        const cardBack = document.createElement('div');
+        cardBack.className = 'card-back';
+        cardBack.style.backgroundImage = `url(${imagePath})`;
+
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
         card.addEventListener('click', () => flipCard(card));
         board.appendChild(card);
     });
@@ -35,11 +60,10 @@ const createBoard = (size) => {
 
 let flippedCards = [];
 
-
+// Funkce pro otáčení karet
 const flipCard = (card) => {
     if (card.classList.contains('flipped') || flippedCards.length === 2) return;
     card.classList.add('flipped');
-    card.textContent = card.dataset.value;
     flippedCards.push(card);
 
     if (flippedCards.length === 2) {
@@ -47,33 +71,34 @@ const flipCard = (card) => {
     }
 };
 
-
+// Kontrola shody dvojice
 const checkMatch = () => {
     moves++;
     const [card1, card2] = flippedCards;
-    if (card1.dataset.value === card2.dataset.value) {
+    const image1 = card1.querySelector('.card-back').style.backgroundImage;
+    const image2 = card2.querySelector('.card-back').style.backgroundImage;
+
+    if (image1 === image2) {
         playerScores[playerTurn - 1]++;
         flippedCards = [];
         updateScore();
     } else {
         setTimeout(() => {
             card1.classList.remove('flipped');
-            card1.textContent = '';
             card2.classList.remove('flipped');
-            card2.textContent = '';
             flippedCards = [];
             switchPlayer();
         }, 1000);
     }
 };
 
-
+// Přepínání hráče
 const switchPlayer = () => {
     playerTurn = playerTurn === 1 ? 2 : 1;
     updateTurn();
 };
 
-
+// Aktualizace skóre a tahu
 const updateScore = () => {
     document.getElementById('score').textContent = `Hráč 1: ${playerScores[0]} | Hráč 2: ${playerScores[1]}`;
     if (playerScores[0] + playerScores[1] === (boardSize * boardSize) / 2) {
@@ -86,7 +111,7 @@ const updateTurn = () => {
     document.getElementById('moves').textContent = `Počet tahů: ${moves}`;
 };
 
-
+// Restart hry
 const restartGame = () => {
     playerTurn = 1;
     playerScores = [0, 0];
@@ -95,7 +120,7 @@ const restartGame = () => {
     init();
 };
 
-
+// Inicializace hry
 const init = () => {
     const controls = document.createElement('div');
     controls.className = 'controls';
