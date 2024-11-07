@@ -64,14 +64,14 @@ body {
     border-radius: 8px;
 }
 
-/* Přední strana karty */
+
 .card-front {
     background-image: url("https://kvalitni-vycep.cz/wp-content/uploads/2022/04/ra121.jpg");
     background-size: cover;
     color: #fff;
 }
 
-/* Zadní strana karty */
+
 .card-back {
     background-color: #0094C6;
     color: #fff;
@@ -82,7 +82,7 @@ body {
     
 }
 
-/* Ovládací prvky */
+
 .controls {
     margin-top: 20px;
 }
